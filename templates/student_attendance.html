@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Attendance Records</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background: #e7f3ff;
+            border: 1px solid #d0e6ff;
+            border-radius: 5px;
+            margin: 10px 0;
+            padding: 10px;
+            position: relative;
+        }
+
+        li a {
+            text-decoration: none;
+            color: #1e90ff;
+            font-weight: bold;
+        }
+
+        li a:hover {
+            text-decoration: underline;
+        }
+
+        p {
+            margin: 5px 0;
+        }
+
+        .eligible {
+            color: green;
+            font-weight: bold;
+        }
+
+        .not-eligible {
+            color: red;
+            font-weight: bold;
+        }
+
+        .error {
+            color: red;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Your Attendance Records</h1>
+
+        {% load custom_filters %}  <!-- Load the custom filter -->
+
+        {% if unique_units %}
+            <ul>
+                {% for unit in unique_units %}
+                    <li>
+                        <a href="{% url 'unit_attendance' unit.id %}">{{ unit.unit_code }} - {{ unit.unit_name }}</a>
+                        {% with unit_attendance_info|get_item:unit as info %}
+                            <p>Attendance Percentage: {{ info.attendance_percentage|floatformat:2 }}%</p>
+                            {% if info.eligible_for_exams %}
+                                <p class="eligible">You are allowed to sit for exams and have been awarded {{ info.bonus_marks }} bonus marks.</p>
+                            {% else %}
+                                <p class="not-eligible">You are not eligible to sit for exams.</p>
+                            {% endif %}
+                        {% endwith %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No attendance records found.</p>
+        {% endif %}
+
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+    </div>
+</body>
+</html>
+

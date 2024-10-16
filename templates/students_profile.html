@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Profile</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f4f8;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e1e1e1;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+        img {
+            display: block;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            width: 180px;
+            height: 180px;
+            object-fit: cover;
+            border: 3px solid #007BFF;
+        }
+        .info {
+            font-size: 18px;
+            color: #555;
+        }
+        strong {
+            color: #007BFF;
+        }
+        a {
+            display: inline-block;
+            margin: 20px auto;
+            padding: 12px 25px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+        a:hover {
+            background-color: #0056b3;
+        }
+        .profile-data {
+            margin: 15px 0;
+            padding: 10px;
+            border-bottom: 1px solid #e1e1e1;
+        }
+        .profile-data:last-child {
+            border-bottom: none;
+        }
+        /* Loading Bar Styles */
+        #loadingBar {
+            width: 0;
+            height: 4px;
+            background-color: #007BFF;
+            position: fixed;
+            top: 0;
+            left: 0;
+            transition: width 0.3s ease;
+        }
+        /* Updated Pop-up Styles */
+        .popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .popup.show {
+            opacity: 1;
+        }
+        .popup-content {
+            text-align: center;
+        }
+        .close-btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 5px 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="loadingBar"></div>
+    <div class="container">
+        <h1>{{ student_profile.first_name }} {{ student_profile.last_name }}</h1>
+        <img src="{{ student_profile.image.url }}" alt="Profile Image">
+        <div class="info">
+            <div class="profile-data"><strong>Program:</strong> {{ student_profile.course }}</div>
+            <div class="profile-data"><strong>Username:</strong> {{ student_profile.user_name }}</div>
+            <div class="profile-data"><strong>Registration Number:</strong> {{ student_profile.reg_no }}</div>       
+            <div class="profile-data"><strong>Email:</strong> {{ student_profile.email }}</div>
+           
+        </div>
+        <a href="{% url 'unit_list' %}">Back to Units</a>
+    </div>
+
+    <div id="scanCompletePopup" class="popup">
+        <div class="popup-content">
+            <h2>Scanning Completed</h2>
+            <p>Your Attendance has been successfully submitted.</p>
+            <button class="close-btn" onclick="closePopup()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // Simulating a loading process
+        window.onload = function() {
+            var loadingBar = document.getElementById('loadingBar');
+            var width = 0;
+            var interval = setInterval(function() {
+                if (width >= 100) {
+                    clearInterval(interval);
+                    loadingBar.style.width = '100%';
+                    setTimeout(showPopup, 500);  // Show popup after a short delay
+                } else {
+                    width += 5;
+                    loadingBar.style.width = width + '%';
+                }
+            }, 50);
+        };
+
+        function showPopup() {
+            var popup = document.getElementById('scanCompletePopup');
+            popup.style.display = 'block';
+            setTimeout(() => popup.classList.add('show'), 10); // Trigger fade-in
+            setTimeout(closePopup, 5000); // Close after 30 seconds
+        }
+
+        function closePopup() {
+            var popup = document.getElementById('scanCompletePopup');
+            popup.classList.remove('show'); // Start fade-out
+            setTimeout(() => {
+                popup.style.display = 'none';
+            }, 500); // Wait for fade-out to complete
+        }
+    </script>
+</body>
+</html>

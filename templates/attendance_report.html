@@ -1,0 +1,61 @@
+{% load custom_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Report</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .present {
+            color: green;
+            font-weight: bold;
+        }
+        .absent {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Attendance Report for {{ unit.unit_name }} ({{ unit.unit_code }})</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Student</th>
+                {% for week in weeks %}
+                    <th>{{ week }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in students %}
+                <tr>
+                    <!-- Display student name -->
+                    <td>{{ student.profile.first_name }} {{ student.profile.last_name }}</td>
+
+                    <!-- Loop through attendance data for each week -->
+                    {% for week_attendance in attendance_data|get_item:student %}
+                        <td class="{% if week_attendance == '✓' %}present{% else %}absent{% endif %}">
+                            {{ week_attendance }}
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

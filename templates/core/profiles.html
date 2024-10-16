@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Profiles</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Student Profiles</h1>
+    </header>
+    <main>
+        <section>
+            <h2>All Students</h2>
+            <ul>
+                {% for profile in profiles %}
+                    <li>
+                        <img src="{{ profile.image.url }}" alt="Profile Picture" width="50">
+                        {{ profile.first_name }} {{ profile.last_name }}
+                        <a href="{% url 'details' %}">View Details</a>
+                    </li>
+                {% empty %}
+                    <li>No profiles available.</li>
+                {% endfor %}
+            </ul>
+        </section>
+        <button onclick="window.location.href='{% url 'index' %}'">Back to Home</button>
+    </main>
+</body>
+</html>

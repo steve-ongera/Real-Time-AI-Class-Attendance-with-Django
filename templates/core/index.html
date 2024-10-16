@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance System</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Attendance System</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Recently Scanned Faces</h2>
+            <ul>
+                {% for face in scanned %}
+                    <li>{{ face.profile.first_name }} {{ face.profile.last_name }} - Scanned on: {{ face.date }}</li>
+                {% empty %}
+                    <li>No faces scanned yet.</li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <section>
+            <h2>Present Students</h2>
+            <ul>
+                {% for student in present_students %}
+                    <li>{{ student.student.first_name }} {{ student.student.last_name }} - Attended on: {{ student.date }}</li>
+                {% empty %}
+                    <li>No students present today.</li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <section>
+            <h2>Absent Students</h2>
+            <ul>
+                {% for student in absent_students %}
+                    <li>{{ student.student.first_name }} {{ student.student.last_name }} - Absent on: {{ student.date }}</li>
+                {% empty %}
+                    <li>All students are present today.</li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <button onclick="window.location.href='{% url 'unit_list' %}'">Scan Attendance</button>
+    </main>
+</body>
+</html>

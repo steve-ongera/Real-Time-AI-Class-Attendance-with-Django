@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<style>
+ 
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+    
+        .dashboard-container {
+            max-width: 1000px;
+            margin: 20px auto;
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+    
+        .profile-header {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            background-color: #3f51b5;
+            color: white;
+        }
+    
+        .profile-header .profile-picture {
+            margin-right: 20px;
+        }
+    
+        .profile-header .profile-picture img {
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border: 4px solid #fff;
+        }
+    
+        .profile-header .welcome-info {
+            flex-grow: 1;
+        }
+    
+        .profile-header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+    
+        .profile-header h2 {
+            margin: 5px 0 0 0;
+            font-size: 20px;
+            color: #d1d1f4;
+        }
+    
+        .profile-info {
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+    
+        .profile-info h3 {
+            border-bottom: 2px solid #3f51b5;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+    
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+    
+        .info-grid p {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+        }
+    
+        .info-grid p strong {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+    
+        .logout-btn {
+            text-align: center;
+            padding: 20px;
+        }
+    
+        .btn {
+            background-color: #f44336;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+    
+        .btn:hover {
+            background-color: #d32f2f;
+        }
+   
+    
+    /* Your existing CSS here */
+    
+    /* Add styles for the pencil icon */
+    .edit-profile-link {
+        text-decoration: none;
+        color: #3f51b5;
+        margin-left: 10px;
+        font-size: 1.2em;
+        vertical-align: middle;
+    }
+
+    .edit-profile-link:hover {
+        color: #5c6bc0;
+    }
+
+</style>
+
+<div class="dashboard-container">
+    <div class="profile-header">
+        <div class="profile-picture">
+            {% if student_profile.image %}
+                <img src="{{ student_profile.image.url }}" alt="Profile Picture" class="profile-img">
+            {% else %}
+                <img src="{% static 'images/default_profile.png' %}" alt="Default Profile" class="profile-img">
+            {% endif %}
+        </div>
+        <div class="welcome-info">
+            <h1>Welcome, {{ student_profile.first_name }} {{ student_profile.last_name }}!</h1>
+            <h2>{{ student_profile.course }}</h2>
+        </div>
+    </div>
+
+    <div class="profile-info">
+        <h3>
+            Profile Information
+            <a href="{% url 'update_profile' %}" class="edit-profile-link">
+                <i class="fas fa-pencil-alt"></i>
+            </a>
+        </h3>
+        <div class="info-grid">
+            <p><strong>Registration Number:</strong> {{ student_profile.reg_no }}</p>
+            <p><strong>Phone:</strong> {{ student_profile.phone }}</p>
+            <p><strong>Email:</strong> {{ student_profile.email }}</p>
+            <p><strong>Date of Birth:</strong> {{ student_profile.dob }}</p>
+            <p><strong>Religion:</strong> {{ student_profile.religion }}</p>
+            <p><strong>Games:</strong> {{ student_profile.games }}</p>
+            <p><strong>Hostel:</strong> {{ student_profile.hostel }}</p>
+            <p><strong>Room Number:</strong> {{ student_profile.room_no }}</p>
+            <p><strong>Parents' Phone:</strong> {{ student_profile.parents_phone }}</p>
+            <p><strong>Parents' Name:</strong> {{ student_profile.parents_name }}</p>
+            <p><strong>Address:</strong> {{ student_profile.address }}</p>
+        </div>
+    </div>
+
+    <div class="logout-btn">
+        <a href="{% url 'logout' %}" class="btn">Logout</a>
+    </div>
+</div>
+{% endblock %}

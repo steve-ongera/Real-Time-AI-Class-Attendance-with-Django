@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit-Specific Student Attendance</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .present {
+            background-color: #90EE90;
+        }
+        .absent {
+            background-color: #FFB6C1;
+        }
+    </style>
+</head>
+<body>
+    <h1>Unit-Specific Student Attendance</h1>
+    
+    {% for unit in units_data %}
+        <h2>{{ unit.unit_name }} ({{ unit.unit_code }})  </h2>
+        <a href="{% url 'attendance_graph' unit.id %}" class="graph-link">View Attendance Graph</a> 
+      
+        <table>
+            <thead>
+                <tr>
+                    <th>Student</th>
+                    {% for week in weeks %}
+                        <th>{{ week }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in unit.students %}
+                    <tr>
+                        <td>{{ student.name }}</td>
+                        {% for week, status in student.attendance.items %}
+                            <td class="{% if status == 'Present' %}present{% else %}absent{% endif %}">
+                                {{ status }}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endfor %}
+</body>
+</html>

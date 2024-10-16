@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Details</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Profile Details</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Last Scanned Profile</h2>
+            {% if profile %}
+                <img src="{{ profile.image.url }}" alt="Profile Picture" width="100">
+                <p>Name: {{ profile.first_name }} {{ profile.last_name }}</p>
+                <p>Email: {{ profile.email }}</p>
+                <p>Phone: {{ profile.phone }}</p>
+            {% else %}
+                <p>No face scanned recently.</p>
+            {% endif %}
+        </section>
+        <button onclick="window.location.href='{% url 'index' %}'">Back to Home</button>
+    </main>
+</body>
+</html>
