@@ -18,6 +18,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from .forms import CustomRegisterForm
+from django.contrib import messages
 
 
 # Path for sound notification
@@ -224,7 +225,7 @@ def student_profile_update(request, pk):
             return redirect('student_profile_list')
     else:
         form = StudentProfileForm(instance=student)
-    return render(request, 'profiles/student_profile_form.html', {'form': form})
+    return render(request, 'profiles/student_profile_form.html', {'form': form, 'student': student})
 
 
 # View for creating and listing lecturer profiles
@@ -464,10 +465,20 @@ def register(request):
     if request.method == 'POST':
         form = CustomRegisterForm(request.POST)
         if form.is_valid():
+            # Process the form data and save the user
             form.save()
-            return redirect('login')
+            messages.success(request, "Registration successful. You can now log in.")
+            return redirect('login')  # Redirect to login or wherever you need
+        else:
+            # If form is not valid, add specific error messages
+            messages.error(request, "There was an error with your submission. Please correct the errors and try again.")
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field.capitalize()}: {error}")
+
     else:
         form = CustomRegisterForm()
+
     return render(request, 'registration/register.html', {'form': form})
 
 # Login View
@@ -478,14 +489,18 @@ def custom_login(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
+            # Add a success message
+            messages.success(request, 'Login successful! Welcome to your dashboard.')
             return redirect('dashboard')
         else:
-            return HttpResponse("Invalid login credentials")
+            messages.error(request, 'Invalid login credentials. Please try again.')
+            return redirect('login')
     return render(request, 'registration/login.html')
 
 # Logout View
 def custom_logout(request):
     logout(request)
+    messages.success(request, 'Logged out successfully !')
     return redirect('login')
 
 @login_required
@@ -502,7 +517,8 @@ def dashboard(request):
     
     except StudentProfile.DoesNotExist:
         # If no profile is found, redirect to the error page
-        return render(request, 'error.html', {'message': 'Profile not found'})
+        messages.error(request, 'Logged in successful but Your profile not found contact Admin.')
+        return render(request, 'error.html')
     
 
 

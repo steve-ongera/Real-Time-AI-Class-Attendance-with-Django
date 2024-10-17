@@ -1,250 +1,250 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unit List</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}"> <!-- Optional: Link to your CSS file -->
-    <style>
-        /* Global styles */
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
-        }
+{% block content %}
+<style>
+    
 
-        header {
-            background-color: #4CAF50;
-            color: #fff;
-            padding: 20px 0;
-            text-align: center;
-        }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
 
+    table th, table td {
+        padding: 15px;
+        text-align: left;
+    }
+
+    table th {
+        background-color: #4CAF50;
+        color: #fff;
+    }
+
+    table tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    table tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    select {
+        padding: 5px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+    /* Modal styles */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1000; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+        padding-top: 60px; /* Location of the box */
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 5% auto; /* 15% from the top and centered */
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%; /* Could be more or less, depending on screen size */
+        text-align: center;
+        border-radius: 10px;
+    }
+
+    .progress {
+        width: 100%;
+        background-color: #f3f3f3;
+        border-radius: 5px;
+        margin-top: 20px;
+    }
+
+    .progress-bar {
+        width: 0%;
+        height: 30px;
+        background-color: #4CAF50;
+        border-radius: 5px;
+        text-align: center;
+        line-height: 30px;
+        color: white;
+    }
+
+    /* Image styling */
+    .modal-image {
+        width: 100px; /* Width of the image */
+        height: auto; /* Maintain aspect ratio */
+        border: 3px solid #4CAF50; /* Green border */
+        border-radius: 10px; /* Rounded corners */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Shadow effect */
+        margin-bottom: 20px; /* Space below the image */
+    }
+
+    /* Footer styles */
+    footer {
+        text-align: center;
+        padding: 20px;
+        background-color: #333;
+        color: #fff;
+    }
+
+    /* Responsive styles */
+    @media (max-width: 768px) {
         header h1 {
-            margin: 0;
-            font-size: 2.5rem;
-        }
-
-        header a {
-            color: #fff;
-            text-decoration: none;
-            font-size: 1rem;
-            background-color: #333;
-            padding: 10px 20px;
-            border-radius: 5px;
-            margin-top: 10px;
-            display: inline-block;
-        }
-
-        header a:hover {
-            background-color: #666;
-        }
-
-        /* Main content styles */
-        main {
-            max-width: 1200px;
-            margin: 30px auto;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
+            font-size: 2rem;
         }
 
         table th, table td {
-            padding: 15px;
-            text-align: left;
+            font-size: 0.9rem;
+            padding: 10px;
         }
+    }
+</style>
 
-        table th {
-            background-color: #4CAF50;
-            color: #fff;
-        }
-
-        table tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        table tr:hover {
-            background-color: #f1f1f1;
-        }
-
-        select {
-            padding: 5px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-
-        /* Modal styles */
-        .modal {
-            display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
-            z-index: 1000; /* Sit on top */
-            left: 0;
-            top: 0;
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            overflow: auto; /* Enable scroll if needed */
-            background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
-            padding-top: 60px; /* Location of the box */
-        }
-
-        .modal-content {
-            background-color: #fefefe;
-            margin: 5% auto; /* 15% from the top and centered */
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%; /* Could be more or less, depending on screen size */
-            text-align: center;
-            border-radius: 10px;
-        }
-
-        .progress {
-            width: 100%;
-            background-color: #f3f3f3;
-            border-radius: 5px;
-            margin-top: 20px;
-        }
-
-        .progress-bar {
-            width: 0%;
-            height: 30px;
-            background-color: #4CAF50;
-            border-radius: 5px;
-            text-align: center;
-            line-height: 30px;
-            color: white;
-        }
-
-        /* Image styling */
-        .modal-image {
-            width: 100px; /* Width of the image */
-            height: auto; /* Maintain aspect ratio */
-            border: 3px solid #4CAF50; /* Green border */
-            border-radius: 10px; /* Rounded corners */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Shadow effect */
-            margin-bottom: 20px; /* Space below the image */
-        }
-
-        /* Footer styles */
-        footer {
-            text-align: center;
-            padding: 20px;
-            background-color: #333;
-            color: #fff;
-        }
-
-        /* Responsive styles */
-        @media (max-width: 768px) {
-            header h1 {
-                font-size: 2rem;
-            }
-
-            table th, table td {
-                font-size: 0.9rem;
-                padding: 10px;
-            }
-        }
-    </style>
-    <script>
-        // Function to show the modal
-        function showModal() {
-            const modal = document.getElementById("myModal");
-            modal.style.display = "block";
-
-            // Simulate a progress bar filling
-            let progressBar = document.getElementById("progress-bar");
-            let width = 0;
-            const interval = setInterval(function() {
-                if (width >= 100) {
-                    clearInterval(interval);
-                    // After progress is complete, you can redirect or perform another action
-                    setTimeout(() => {
-                        modal.style.display = "none"; // Hide modal after completion
-                    }, 500); // Delay for visibility
-                } else {
-                    width++;
-                    progressBar.style.width = width + '%';
-                    progressBar.innerText = width + '%';
-                }
-            }, 50); // Adjust speed of progress
-        }
-
-        // Close the modal when clicking outside of it
-        window.onclick = function(event) {
-            const modal = document.getElementById("myModal");
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-    </script>
-</head>
-<body>
-    <header>
-        <h1>Units List</h1>
-        <a href="{% url 'scan' %}">Back to Scanner</a>
-    </header>
-
-    <main>
-        <table>
-            <thead>
-                <tr>
-                    <th>Unit Code</th>
-                    <th>Unit Name</th>
-                    <th>Course</th>
-                    <th>Analysis</th>
-                    <th>Actions</th>
-                    <th>View unit</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for unit in units %}
-                    <tr>
-                        <td>{{ unit.unit_code }}</td>
-                        <td>{{ unit.unit_name }}</td>
-                        <td>{{ unit.course }}</td>
-                        <td>{{ unit.credits }}</td>
-                        <td>
-                            <select id="week-select-{{ unit.id }}" onchange="showModal(); location = this.value;">
-                                <option value="">Select Week</option>
-                                {% for week in weeks %}
-                                    <option value="{% url 'scan' %}?unit_id={{ unit.id }}&week={{ week }}">{{ week }}</option>
-                                {% endfor %}
-                            </select>
-                        </td>
-                        <td><a href="{% url 'unit_specific_attendance_detailed' unit.id %}">View</a></td>
-                    </tr>
-                {% empty %}
-                    <tr>
-                        <td colspan="6">No units available.</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </main>
-
-    <!-- Modal Structure -->
-    <div id="myModal" class="modal">
-        <div class="modal-content">
-            <h2>Scanning...</h2>
-            <img src="{% static 'img/scan.jpg' %}" alt="Scanning" class="modal-image">
-            <div class="progress">
-                <div id="progress-bar" class="progress-bar">0%</div>
+    <!-- Hero Start -->
+    <div class="container-fluid pt-5 bg-primary hero-header">
+        <div class="container pt-5">
+            <div class="row g-5 pt-5">
+                <div class="col-lg-6 align-self-center text-center text-lg-start mb-lg-5">
+                    <h1 class="display-4 text-white mb-4 animated slideInRight">Unit Attendances  </h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center justify-content-lg-start mb-0">
+                            <li class="breadcrumb-item"><a class="text-white" href="#">Home</a></li>
+                            <li class="breadcrumb-item"><a class="text-white" href="#">Pages</a></li>
+                            <li class="breadcrumb-item text-white active" aria-current="page">attendances </li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-lg-6 align-self-end text-center text-lg-end">
+                    <img class="img-fluid" src="{% static 'img/hero-img.png'%}" alt="" style="max-height: 300px;">
+                </div>
             </div>
         </div>
     </div>
+    <!-- Hero End -->
 
-    <footer>
-        <p>&copy; {{ current_year }} Your Institution Name</p>
-    </footer>
-</body>
-</html>
+    <!-- Full Screen Search Start -->
+    <div class="modal fade" id="searchModal" tabindex="-1">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content" style="background: rgba(20, 24, 62, 0.7);">
+                <div class="modal-header border-0">
+                    <button type="button" class="btn btn-square bg-white btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex align-items-center justify-content-center">
+                    <div class="input-group" style="max-width: 600px;">
+                        <input type="text" class="form-control bg-transparent border-light p-3"
+                            placeholder="Type search keyword">
+                        <button class="btn btn-light px-4"><i class="bi bi-search"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Full Screen Search End -->
+
+
+    <!-- Login Start -->
+    <div class="container-fluid py-5">
+        <div class="container py-5">
+            <div class="mx-auto text-center wow fadeIn" data-wow-delay="0.1s" style="max-width: 500px;">
+                
+             
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-12">
+    
+        <script>
+            // Function to show the modal
+            function showModal() {
+                const modal = document.getElementById("myModal");
+                modal.style.display = "block";
+
+                // Simulate a progress bar filling
+                let progressBar = document.getElementById("progress-bar");
+                let width = 0;
+                const interval = setInterval(function() {
+                    if (width >= 100) {
+                        clearInterval(interval);
+                        // After progress is complete, you can redirect or perform another action
+                        setTimeout(() => {
+                            modal.style.display = "none"; // Hide modal after completion
+                        }, 500); // Delay for visibility
+                    } else {
+                        width++;
+                        progressBar.style.width = width + '%';
+                        progressBar.innerText = width + '%';
+                    }
+                }, 50); // Adjust speed of progress
+            }
+
+            // Close the modal when clicking outside of it
+            window.onclick = function(event) {
+                const modal = document.getElementById("myModal");
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+        </script>
+
+        <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Unit Code</th>
+                            <th>Unit Name</th>
+                            <th>Course</th>
+                            <th>Analysis</th>
+                            <th>Actions</th>
+                            <th>View unit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for unit in units %}
+                            <tr>
+                                <td>{{ unit.unit_code }}</td>
+                                <td>{{ unit.unit_name }}</td>
+                                <td>{{ unit.course }}</td>
+                                <td>{{ unit.credits }}</td>
+                                <td>
+                                    <select id="week-select-{{ unit.id }}" onchange="showModal(); location = this.value;">
+                                        <option value="">Select Week</option>
+                                        {% for week in weeks %}
+                                            <option value="{% url 'scan' %}?unit_id={{ unit.id }}&week={{ week }}">{{ week }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                                <td><a href="{% url 'unit_specific_attendance_detailed' unit.id %}">View</a></td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="6">No units available.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>     
+  
+
+                <!-- Modal Structure -->
+                <div id="myModal" class="modal">
+                    <div class="modal-content">
+                        <h2>Scanning...</h2>
+                        <img src="{% static 'img/scan.jpg' %}" alt="Scanning" class="modal-image">
+                        <div class="progress">
+                            <div id="progress-bar" class="progress-bar">0%</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

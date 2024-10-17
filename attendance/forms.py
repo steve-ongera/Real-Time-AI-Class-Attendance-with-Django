@@ -16,6 +16,12 @@ class CustomRegisterForm(forms.ModelForm):
         model = User
         fields = ['username', 'email', 'first_name', 'last_name']
 
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email).exists():
+            raise ValidationError("This email is already taken. Please choose a different one.")
+        return email
+
     def clean_password2(self):
         password1 = self.cleaned_data.get('password1')
         password2 = self.cleaned_data.get('password2')
@@ -106,7 +112,7 @@ class AttendanceForm(forms.ModelForm):
 class StudentProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = StudentProfile
-        fields = ['address', 'parents_phone', 'parents_name', 'religion']
+        fields = ['address', 'parents_phone', 'parents_name', 'religion','email','phone']
         widgets = {
             'address': forms.TextInput(attrs={'class': 'form-control'}),
             'parents_phone': forms.TextInput(attrs={'class': 'form-control'}),

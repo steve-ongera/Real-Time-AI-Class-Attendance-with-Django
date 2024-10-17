@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+    <!-- Hero Start -->
+    <div class="container-fluid pt-5 bg-primary hero-header">
+        <div class="container pt-5">
+            <div class="row g-5 pt-5">
+                <div class="col-lg-6 align-self-center text-center text-lg-start mb-lg-5">
+                    {% if form.instance.pk %}
+                    <h1 class="display-4 text-white mb-4 animated slideInRight">Update Student Profile</h1>
+                    {% else %}
+                    <h1 class="display-4 text-white mb-4 animated slideInRight">Add Student Profile</h1>
+                    
+                    {% endif %} 
+
+                    
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center justify-content-lg-start mb-0">
+                            <li class="breadcrumb-item"><a class="text-white" href="#">Home</a></li>
+                            <li class="breadcrumb-item text-white active" aria-current="page">Edit Profile</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-lg-6 align-self-end text-center text-lg-end">
+                    <img class="img-fluid" src="{% static 'img/hero-img.png' %}" alt="" style="max-height: 300px;">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Hero End -->
+
+    <!-- Update Profile Form Start -->
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                {% if form.instance.pk %}<h2 class="text-center mb-4"> Edit Student Profile </h2>{% else %}<h2 class="text-center mb-4">Add Student Profile  </h2>{% endif %} 
+                
+
+                <div class="wow fadeIn" data-wow-delay="0.1s">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <div class="row g-3">
+                            <!-- Username -->
+                            <div class="col-md-6">
+                                <label for="user_name" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="user_name" name="user_name" value="{{ form.user_name.value }}" required>
+                            </div>
+
+                            <!-- First Name -->
+                            <div class="col-md-6">
+                                <label for="first_name" class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="first_name" name="first_name" value="{{ form.first_name.value }}" required>
+                            </div>
+
+                            <!-- Last Name -->
+                            <div class="col-md-6">
+                                <label for="last_name" class="form-label">Last Name</label>
+                                <input type="text" class="form-control" id="last_name" name="last_name" value="{{ form.last_name.value }}" required>
+                            </div>
+
+                            <!-- Registration Number -->
+                            <div class="col-md-6">
+                                <label for="reg_no" class="form-label">Registration No</label>
+                                <input type="text" class="form-control" id="reg_no" name="reg_no" value="{{ form.reg_no.value }}" required>
+                            </div>
+
+                            <!-- Phone -->
+                            <div class="col-md-6">
+                                <label for="phone" class="form-label">Phone</label>
+                                <input type="text" class="form-control" id="phone" name="phone" value="{{ form.phone.value }}" required>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" value="{{ form.email.value }}" required>
+                            </div>
+
+                            <!-- Date of Birth -->
+                            <div class="col-md-6">
+                                <label for="dob" class="form-label">Date of Birth</label>
+                                {{ form.dob }}
+
+                            </div>
+
+                            <!-- Course -->
+                            <div class="col-md-6">
+                                <label for="course" class="form-label">Course</label>
+                                <input type="text" class="form-control" id="course" name="course" value="{{ form.course.value }}" required>
+                            </div>
+
+                            <!-- Religion -->
+                            <div class="col-md-6">
+                                <label for="religion" class="form-label">Religion</label>
+                                <input type="text" class="form-control" id="religion" name="religion" value="{{ form.religion.value }}" required>
+                            </div>
+
+                            <!-- Games -->
+                            <div class="col-md-6">
+                                <label for="games" class="form-label">Games</label>
+                                <input type="text" class="form-control" id="games" name="games" value="{{ form.games.value }}" required>
+                            </div>
+
+                            <!-- Hostel -->
+                            <div class="col-md-6">
+                                <label for="hostel" class="form-label">Hostel</label>
+                                <input type="text" class="form-control" id="hostel" name="hostel" value="{{ form.hostel.value }}" required>
+                            </div>
+
+                            <!-- Room Number -->
+                            <div class="col-md-6">
+                                <label for="room_no" class="form-label">Room Number</label>
+                                <input type="text" class="form-control" id="room_no" name="room_no" value="{{ form.room_no.value }}" required>
+                            </div>
+
+                            <!-- Parent's Phone -->
+                            <div class="col-md-6">
+                                <label for="parents_phone" class="form-label">Parent's Phone</label>
+                                <input type="text" class="form-control" id="parents_phone" name="parents_phone" value="{{ form.parents_phone.value }}" required>
+                            </div>
+
+                            <!-- Parent's Name -->
+                            <div class="col-md-6">
+                                <label for="parents_name" class="form-label">Parent's Name</label>
+                                <input type="text" class="form-control" id="parents_name" name="parents_name" value="{{ form.parents_name.value }}" required>
+                            </div>
+
+                            <!-- Address -->
+                            <div class="col-md-12">
+                                <label for="address" class="form-label">Address</label>
+                                <input type="text" class="form-control" id="address" name="address" value="{{ form.address.value }}" required>
+                            </div>
+
+                            <!-- Image -->
+                            <div class="col-md-12">
+                                <label for="image" class="form-label">Profile Image</label>
+                                
+                                <!-- Display current image if available -->
+                                {% if student.image %}
+                                    <div class="mb-3">
+                                        <img src="{{ student.image.url }}" alt="Profile Image" class="img-thumbnail" style="max-width: 150px;">
+                                    </div>
+                                {% else %}
+                                    <p>No profile image uploaded yet.</p>
+                                {% endif %}
+                                
+                                <!-- File input field for uploading new image -->
+                                <input type="file" class="form-control-file" id="image" name="image">
+                            </div>
+                            
+
+                            <!-- Role -->
+                            <div class="col-md-6">
+                                <label for="role" class="form-label">Role</label>
+                                   {{ form.role }}
+                            </div>
+
+                            <div class="col-12 mt-4">
+                                <button type="submit" class="btn btn-primary w-100 py-3">Save Changes</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Update Profile Form End -->
+
+{% endblock %}

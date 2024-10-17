@@ -1,169 +1,146 @@
-{% extends 'base.html' %}
+
+{% extends 'base.html'%}
+
 {% load static %}
 {% block content %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-<style>
- 
-        body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 20px;
-            color: #333;
-        }
-    
-        .dashboard-container {
-            max-width: 1000px;
-            margin: 20px auto;
-            background-color: #fff;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-    
-        .profile-header {
-            display: flex;
-            align-items: center;
-            padding: 20px;
-            background-color: #3f51b5;
-            color: white;
-        }
-    
-        .profile-header .profile-picture {
-            margin-right: 20px;
-        }
-    
-        .profile-header .profile-picture img {
-            border-radius: 50%;
-            width: 120px;
-            height: 120px;
-            object-fit: cover;
-            border: 4px solid #fff;
-        }
-    
-        .profile-header .welcome-info {
-            flex-grow: 1;
-        }
-    
-        .profile-header h1 {
-            margin: 0;
-            font-size: 28px;
-        }
-    
-        .profile-header h2 {
-            margin: 5px 0 0 0;
-            font-size: 20px;
-            color: #d1d1f4;
-        }
-    
-        .profile-info {
-            padding: 20px;
-            background-color: #f8f9fa;
-        }
-    
-        .profile-info h3 {
-            border-bottom: 2px solid #3f51b5;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-            font-size: 22px;
-        }
-    
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-    
-        .info-grid p {
-            background-color: #fff;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-        }
-    
-        .info-grid p strong {
-            display: block;
-            margin-bottom: 5px;
-            color: #555;
-        }
-    
-        .logout-btn {
-            text-align: center;
-            padding: 20px;
-        }
-    
-        .btn {
-            background-color: #f44336;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-    
-        .btn:hover {
-            background-color: #d32f2f;
-        }
-   
-    
-    /* Your existing CSS here */
-    
-    /* Add styles for the pencil icon */
-    .edit-profile-link {
-        text-decoration: none;
-        color: #3f51b5;
-        margin-left: 10px;
-        font-size: 1.2em;
-        vertical-align: middle;
-    }
-
-    .edit-profile-link:hover {
-        color: #5c6bc0;
-    }
-
-</style>
-
-<div class="dashboard-container">
-    <div class="profile-header">
-        <div class="profile-picture">
-            {% if student_profile.image %}
-                <img src="{{ student_profile.image.url }}" alt="Profile Picture" class="profile-img">
-            {% else %}
-                <img src="{% static 'images/default_profile.png' %}" alt="Default Profile" class="profile-img">
-            {% endif %}
-        </div>
-        <div class="welcome-info">
-            <h1>Welcome, {{ student_profile.first_name }} {{ student_profile.last_name }}!</h1>
-            <h2>{{ student_profile.course }}</h2>
+     <!-- Hero Start -->
+    <div class="container-fluid pt-5 bg-primary hero-header">
+        <div class="container pt-5">
+            <div class="row g-5 pt-5">
+                <div class="col-lg-6 align-self-center text-center text-lg-start mb-lg-5">
+                    <h1 class="display-4 text-white mb-4 animated slideInRight">Dashboard</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center justify-content-lg-start mb-0">
+                            <li class="breadcrumb-item"><a class="text-white" href="#">Home</a></li>
+                            <li class="breadcrumb-item"><a class="text-white" href="#">Pages</a></li>
+                            <li class="breadcrumb-item text-white active" aria-current="page">{{ student_profile.reg_no }}</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-lg-6 align-self-end text-center text-lg-end">
+                    
+                </div>
+            </div>
         </div>
     </div>
+    <!-- Hero End -->
 
-    <div class="profile-info">
-        <h3>
-            Profile Information
-            <a href="{% url 'update_profile' %}" class="edit-profile-link">
-                <i class="fas fa-pencil-alt"></i>
-            </a>
-        </h3>
-        <div class="info-grid">
-            <p><strong>Registration Number:</strong> {{ student_profile.reg_no }}</p>
-            <p><strong>Phone:</strong> {{ student_profile.phone }}</p>
-            <p><strong>Email:</strong> {{ student_profile.email }}</p>
-            <p><strong>Date of Birth:</strong> {{ student_profile.dob }}</p>
-            <p><strong>Religion:</strong> {{ student_profile.religion }}</p>
-            <p><strong>Games:</strong> {{ student_profile.games }}</p>
-            <p><strong>Hostel:</strong> {{ student_profile.hostel }}</p>
-            <p><strong>Room Number:</strong> {{ student_profile.room_no }}</p>
-            <p><strong>Parents' Phone:</strong> {{ student_profile.parents_phone }}</p>
-            <p><strong>Parents' Name:</strong> {{ student_profile.parents_name }}</p>
-            <p><strong>Address:</strong> {{ student_profile.address }}</p>
+
+    <!-- Full Screen Search Start -->
+    <div class="modal fade" id="searchModal" tabindex="-1">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content" style="background: rgba(20, 24, 62, 0.7);">
+                <div class="modal-header border-0">
+                    <button type="button" class="btn btn-square bg-white btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex align-items-center justify-content-center">
+                    <div class="input-group" style="max-width: 600px;">
+                        <input type="text" class="form-control bg-transparent border-light p-3"
+                            placeholder="Type search keyword">
+                        <button class="btn btn-light px-4"><i class="bi bi-search"></i></button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+    <!-- Full Screen Search End -->
 
-    <div class="logout-btn">
-        <a href="{% url 'logout' %}" class="btn">Logout</a>
+
+    <!-- Feature Start -->
+    <div class="container-fluid bg-dark feature pt-5">
+        <div class="container pt-5">
+            <div class="row g-5">
+                <div class="col-lg-6 align-self-center mb-md-5 pb-md-5 wow fadeIn" data-wow-delay="0.3s">
+                    <div class="btn btn-sm border rounded-pill text-white px-3 mb-3">Welcome {{ student_profile.first_name }} {{ student_profile.last_name }} </div>
+                    <div class="btn btn-sm border rounded-pill text-white px-3 mb-3"><a style="color:white" href="{% url 'unit_list' %}">Scan</a> </div>
+                   
+                    <h1 class="text-white mb-4">{{ student_profile.course }}</h1>
+
+                      {% if messages %}
+                            <ul class="messages">
+                                {% for message in messages %}
+                                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+
+                    <div class="d-flex align-items-center text-white mb-3">
+                        <div class="btn-sm-square bg-white text-primary rounded-circle me-3">
+                            <i class="fa fa-check"></i>
+                        </div>
+                        <span>{{ student_profile.reg_no }}</span>
+                    </div>
+                    <div class="d-flex align-items-center text-white mb-3">
+                        <div class="btn-sm-square bg-white text-primary rounded-circle me-3">
+                            <i class="fa fa-check"></i>
+                        </div>
+                        <span> {{ student_profile.phone }}</span>
+                    </div>
+                    <div class="d-flex align-items-center text-white mb-3">
+                        <div class="btn-sm-square bg-white text-primary rounded-circle me-3">
+                            <i class="fa fa-check"></i>
+                        </div>
+                        <span>{{ student_profile.email }}</span>
+                    </div>
+                    <div class="d-flex align-items-center text-white mb-3">
+                        <div class="btn-sm-square bg-white text-primary rounded-circle me-3">
+                            <i class="fa fa-check"></i>
+                        </div>
+                        <span>{{ student_profile.dob }}</span>
+                    </div>
+                    <div class="d-flex align-items-center text-white mb-3">
+                        <div class="btn-sm-square bg-white text-primary rounded-circle me-3">
+                            <i class="fa fa-check"></i>
+                        </div>
+                        <span>{{ student_profile.religion }}</span>
+                    </div>
+                    <div class="d-flex align-items-center text-white mb-3">
+                        <div class="btn-sm-square bg-white text-primary rounded-circle me-3">
+                            <i class="fa fa-check"></i>
+                        </div>
+                        <span> {{ student_profile.hostel }} -  {{ student_profile.room_no }}</span>
+                    </div>
+                    <div class="d-flex align-items-center text-white mb-3">
+                        <div class="btn-sm-square bg-white text-primary rounded-circle me-3">
+                            <i class="fa fa-check"></i>
+                        </div>
+                        <span>{{ student_profile.address }}</span>
+                    </div>
+                    <div class="row g-4 pt-3">
+                        <div class="col-sm-6">
+                            <div class="d-flex rounded p-3" style="background: rgba(256, 256, 256, 0.1);">
+                                <i class="fa fa-user fa-3x text-white"></i>
+                                <div class="ms-3">
+                                    <h2 class="text-white mb-0" data-toggle="counter-up">xx Ksh</h2>
+                                    <p class="text-white mb-0">Fee Balance</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="d-flex rounded p-3" style="background: rgba(256, 256, 256, 0.1);">
+                                <i class="fa fa-home fa-3x text-white"></i>
+                                <div class="ms-3">
+                                    <h2 class="text-white mb-0" data-toggle="counter-up"> 3.1 </h2>
+                                    <p class="text-white mb-0">Year</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 align-self-end text-center text-md-end wow fadeIn" data-wow-delay="0.5s">
+                  
+                    {% if student_profile.image %}
+                        <img class="img-fluid"  src="{{ student_profile.image.url }}" alt="Profile Picture" >
+                    {% else %}
+                        <img  class="img-fluid" src="{% static 'images/default_profile.png' %}" alt="Default Profile" >
+                    {% endif %}
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+    <!-- Feature End -->
+        
 {% endblock %}
+
