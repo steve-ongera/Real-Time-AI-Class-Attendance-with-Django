@@ -24,6 +24,20 @@
     .absent {
         background-color: #FFB6C1;
     }
+
+    /* ... (existing styles) ... */
+    .download-btn {
+        margin-bottom: 20px;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .download-btn:hover {
+        background-color: #0056b3;
+    }
 </style>
 
     <!-- Hero Start -->
@@ -73,7 +87,7 @@
     <div class="container-fluid py-5">
         <div class="container py-5">
             <div class="mx-auto text-center wow fadeIn" data-wow-delay="0.1s" style="max-width: 500px;">
-                
+                <a href="?format=pdf" class="btn btn-primary">Download as PDF</a>
              
             </div>
             <div class="row justify-content-center">
@@ -113,5 +127,7 @@
         </div>
     </div>
 </div>
+
+
 
 {% endblock %}

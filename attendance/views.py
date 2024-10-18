@@ -19,6 +19,9 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from .forms import CustomRegisterForm
 from django.contrib import messages
+from .utils import  generate_attendance_pdf
+import re
+import time
 
 
 # Path for sound notification
@@ -79,10 +82,20 @@ def scan(request):
     face_names = []
     process_this_frame = True
 
+    start_time = time.time()  # Start the timer
+
     while True:
         ret, frame = video_capture.read()
         if not ret:  # Ensure the frame was captured successfully
             break
+
+        # Check if 40 seconds have passed
+        elapsed_time = time.time() - start_time
+        if elapsed_time > 40:
+            video_capture.release()
+            cv2.destroyAllWindows()
+            messages.error(request, "Your image cannot be processed. Try again !")
+            return redirect('ProfileError')  # Redirect if no face is detected within 40 seconds
 
         small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
         rgb_small_frame = small_frame[:, :, ::-1]
@@ -126,12 +139,20 @@ def scan(request):
                             last_face = name
                             winsound.PlaySound(sound, winsound.SND_ASYNC)
 
+                        else:
+                                # If it's the same face, beep three times
+                                for _ in range(3):
+                                    winsound.PlaySound(sound, winsound.SND_ASYNC)    
+                        
+                        # Add success message with unit and week details
+                        messages.success(request, f'Attendance marked successfully for {unit.unit_name}, Week {week}.')
 
-                         # Redirect to the student's profile page
-                        return HttpResponseRedirect(reverse('student_profile', args=[student_profile.id]))    
+                        # Redirect to the student's profile page
+                        return HttpResponseRedirect(reverse('student_profile', args=[student_profile.id]))
 
                     except (StudentProfile.DoesNotExist, Student.DoesNotExist):
-                        print(f"Profile not found for {name}")
+                        messages.error(request, "Your image cannot be processed.")
+                        return redirect('ProfileError')  # Redirect to ProfileError if the student is not found
 
                 face_names.append(name)
 
@@ -156,6 +177,9 @@ def scan(request):
     video_capture.release()
     cv2.destroyAllWindows()
     return HttpResponse('Scanner closed')
+
+def ProfileError(request):  
+    return render(request, 'error_profile.html')
 
 
 
@@ -422,6 +446,18 @@ def unit_attendance_detailed(request, unit_id=None):
         'units_data': units_data,
         'weeks': weeks,
     }
+
+    # Check if the request is for PDF download
+    if request.GET.get('format') == 'pdf':
+        unit_name = units_data[0]['unit_name']
+        # Create a filename-safe version of the unit name
+        safe_filename = re.sub(r'[^\w\-_\. ]', '_', unit_name)
+        safe_filename = safe_filename.replace(' ', '_').lower()
+
+        pdf_buffer = generate_attendance_pdf(units_data, weeks)
+        response = HttpResponse(pdf_buffer, content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename="{safe_filename}.pdf"'
+        return response
     return render(request, 'unit_attendance_table.html', context)
 
 def extract_week_number(week_string):
