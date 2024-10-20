@@ -97,7 +97,7 @@
                     {% for unit in units_data %}
                         <h5>{{ unit.unit_name }} ({{ unit.unit_code }})  </h5>
                         <a href="{% url 'attendance_graph' unit.id %}" class="graph-link">View Attendance Graph</a> 
-                    
+                        <div class="table-responsive">
                         <table>
                             <thead>
                                 <tr>
@@ -120,6 +120,7 @@
                                 {% endfor %}
                             </tbody>
                         </table>
+                    </div>   
                     {% endfor %}
                 </div>
 

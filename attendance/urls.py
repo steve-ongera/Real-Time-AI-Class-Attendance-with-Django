@@ -6,6 +6,7 @@ urlpatterns = [
     path('index/', views.index, name='index'),  # Home page to display scanned attendance
     path('scan/', views.scan, name='scan'),  # URL to scan faces
     path('ProfileError' ,views.ProfileError , name='ProfileError'),
+    path('AnyError/' ,views.AnyError , name='AnyError'),
     path('profiles/', views.profiles, name='profiles'),  # Admin URL to view all profiles
     path('details/', views.details, name='details'),  # Admin URL for details of last scanned face
     path('ajax/', views.ajax, name='ajax'),  # URL for AJAX requests (if applicable)

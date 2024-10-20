@@ -119,3 +119,9 @@ class StudentProfileUpdateForm(forms.ModelForm):
             'parents_name': forms.TextInput(attrs={'class': 'form-control'}),
             'religion': forms.TextInput(attrs={'class': 'form-control'}),
         }
+
+
+class SetCurrentWeekForm(forms.ModelForm):
+    class Meta:
+        model = Unit
+        fields = ['current_week']

@@ -68,6 +68,9 @@ class Unit(models.Model):
     year_of_study = models.IntegerField()  # e.g., 1st year, 2nd year, etc.
     lecturer = models.ForeignKey(LecturerProfile, on_delete=models.CASCADE, limit_choices_to={'role': 'lecturer'})
 
+    # Add a field for the current active week
+    current_week = models.CharField(max_length=2,null=True, blank=False, default='1')  # Tracks the current week students can sign for
+
     def __str__(self):
         return f'{self.unit_code} - {self.unit_name}'
 

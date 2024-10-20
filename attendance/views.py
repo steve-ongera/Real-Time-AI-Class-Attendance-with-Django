@@ -22,6 +22,33 @@ from django.contrib import messages
 from .utils import  generate_attendance_pdf
 import re
 import time
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _  # For translation support
+from django.utils.translation import gettext as _
+
+@receiver(pre_save, sender=Attendance)
+def restrict_future_signing(sender, instance, **kwargs):
+    # Get the associated unit
+    unit = instance.unit
+
+    try:
+        # Convert both weeks to integers for proper comparison
+        current_week = int(unit.current_week)  # Assuming 'current_week' is set in Unit model
+        attendance_week = int(instance.week)  # Convert the CharField 'week' to an integer
+    except ValueError:
+        pass
+        return redirect('AnyError')  # Redirect to an error page in case of invalid week format
+
+    # Restrict signing for future weeks
+    if attendance_week !=  current_week:
+         raise ValidationError(_("Cannot sign attendance for %s (Week %d). Current week is %d.") % (unit.unit_name, attendance_week, current_week))
+        
+
+def AnyError(request):  
+    return render(request, 'anyerror.html')
+
 
 
 # Path for sound notification
@@ -287,6 +314,18 @@ def unit_list(request):
     weeks = list(range(1, 11))  # Create a list of weeks from 1 to 1
     return render(request, 'units/unit_list.html', {'units': units, 'weeks': weeks})
 
+
+def set_current_week(request, unit_id):
+    unit = Unit.objects.get(id=unit_id)
+    if request.method == 'POST':
+        form = SetCurrentWeekForm(request.POST, instance=unit)
+        if form.is_valid():
+            form.save()
+            return redirect('unit_list')
+    else:
+        form = SetCurrentWeekForm(instance=unit)
+    
+    return render(request, 'units/set_current_week.html', {'form': form})
 
 def unit_create(request):
     if request.method == 'POST':
