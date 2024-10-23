@@ -26,6 +26,7 @@ urlpatterns = [
     path('units/', views.unit_list, name='unit_list'),
     path('units/create/', views.unit_create, name='unit_create'),
     path('units/update/<int:pk>/', views.unit_update, name='unit_update'),
+    path('register-units/', views.register_units, name='register_units'),
 
     # Course URLs
     path('courses/', views.course_list, name='course_list'),

@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Units</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h2>Register for Units</h2>
+        
+        <!-- Display any messages -->
+        {% if messages %}
+            <div class="alert">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        <!-- Registration form -->
+        <form method="POST" action="{% url 'register_units' %}">
+            {% csrf_token %}
+            
+            <!-- Course and Year Information -->
+            <div class="form-group">
+                <label for="course">Course:</label>
+                <input type="text" id="course" name="course" value="{{ student.course.course_name }}" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="year_of_study">Year of Study:</label>
+                <input type="text" id="year_of_study" name="year_of_study" value="{{ student.year_of_study }}" readonly>
+            </div>
+
+            <!-- Unit selection -->
+            <div class="form-group">
+                <label for="units">Select Units:</label>
+                <select name="units" id="units" multiple>
+                    {% for unit in available_units %}
+                        <option value="{{ unit.id }}">{{ unit.unit_code }} - {{ unit.unit_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <!-- Submit button -->
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Register Units</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

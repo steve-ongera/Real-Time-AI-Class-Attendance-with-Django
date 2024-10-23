@@ -125,3 +125,6 @@ class SetCurrentWeekForm(forms.ModelForm):
     class Meta:
         model = Unit
         fields = ['current_week']
+
+class UnitRegistrationForm(forms.Form):
+    units = forms.ModelMultipleChoiceField(queryset=Unit.objects.all(), widget=forms.CheckboxSelectMultiple)

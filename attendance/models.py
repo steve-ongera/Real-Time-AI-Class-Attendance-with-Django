@@ -19,6 +19,8 @@ class StudentProfile(models.Model):
     games = models.CharField(max_length=70)
     hostel = models.CharField(max_length=70)
     room_no = models.CharField(max_length=70)
+    year = models.CharField(max_length=70 ,null=True, blank=False)
+    fee_balance = models.CharField(max_length=70,null=True, blank=False)
     parents_phone = models.CharField(max_length=15)  # CharField for phone
     parents_name = models.CharField(max_length=70)
     address = models.CharField(max_length=100)  # Increased length for more flexibility
@@ -107,6 +109,15 @@ class Attendance(models.Model):
     def __str__(self):
         return f'{self.student.profile.first_name} {self.student.profile.last_name} - {self.unit.unit_code} on {self.date}'
 
+# Model for Unit Registration (Students registering for units)
+class UnitRegistration(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    unit = models.ForeignKey(Unit, on_delete=models.CASCADE)
+    semester = models.ForeignKey(Semester, on_delete=models.CASCADE)
+    registration_date = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.student.profile.first_name} {self.student.profile.last_name} registered for {self.unit.unit_name} ({self.unit.unit_code})'
 
 # Last Face Recognition Attempt (for logging face recognition attempts)
 class LastFace(models.Model):

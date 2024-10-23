@@ -8,6 +8,7 @@
         width: 100%;
         border-collapse: collapse;
         margin-bottom: 20px;
+        border-radius: 50px 50px 0px 0px;
     }
 
     table th, table td {
@@ -160,6 +161,38 @@
                 <div class="col-lg-12">
     
         <script>
+
+            // Function to handle week selection
+function handleWeekSelect(selectElement) {
+    const currentWeek = parseInt(selectElement.getAttribute('data-current-week'));
+    const selectedWeek = parseInt(selectElement.value.split('week=')[1]);
+
+    if (selectedWeek === currentWeek) {
+        showModal();
+        location = selectElement.value;
+    } else {
+        alert("You can only select the current week.");
+        selectElement.value = ""; // Reset selection
+    }
+}
+
+// Function to disable non-current week options
+function disableNonCurrentWeeks() {
+    const selects = document.querySelectorAll('select[id^="week-select-"]');
+    selects.forEach(select => {
+        const currentWeek = parseInt(select.getAttribute('data-current-week'));
+        Array.from(select.options).forEach(option => {
+            if (option.value) {
+                const weekNumber = parseInt(option.value.split('week=')[1]);
+                option.disabled = weekNumber !== currentWeek;
+            }
+        });
+    });
+}
+
+// Call the function when the page loads
+window.onload = disableNonCurrentWeeks;
+            
             // Function to show the modal
             function showModal() {
                 const modal = document.getElementById("myModal");
@@ -199,7 +232,7 @@
                             <th>Unit Code</th>
                             <th>Unit Name</th>
                             <th>Course</th>
-                            <th>Analysis</th>
+                            <th>Current Week</th>
                             <th>Actions</th>
                             <th>View unit</th>
                         </tr>
@@ -210,9 +243,9 @@
                                 <td>{{ unit.unit_code }}</td>
                                 <td>{{ unit.unit_name }}</td>
                                 <td>{{ unit.course }}</td>
-                                <td>{{ unit.credits }}</td>
+                                <td>{{unit.current_week}} </td>
                                 <td>
-                                    <select id="week-select-{{ unit.id }}" onchange="showModal(); location = this.value;">
+                                    <select id="week-select-{{ unit.id }}" onchange="handleWeekSelect(this);" data-current-week="{{unit.current_week}}">
                                         <option value="">Select Week</option>
                                         {% for week in weeks %}
                                             <option value="{% url 'scan' %}?unit_id={{ unit.id }}&week={{ week }}">{{ week }}</option>

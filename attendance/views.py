@@ -700,3 +700,17 @@ def unit_attendance(request, unit_id):
             return render(request, 'unit_attendance.html', {'error': 'Student not found.'})
     else:
         return render(request, 'unit_attendance.html', {'error': 'User not authenticated.'})
+
+
+
+def register_units(request):
+    student = StudentProfile.objects.get(user_name=request.user.username)
+    if request.method == 'POST':
+        form = UnitRegistrationForm(request.POST)
+        if form.is_valid():
+            for unit in form.cleaned_data['units']:
+                UnitRegistration.objects.get_or_create(student=student, unit=unit, semester=unit.semester)
+            return redirect('dashboard')
+    else:
+        form = UnitRegistrationForm()
+    return render(request, 'units/register_units.html', {'form': form})
